@@ -1,0 +1,509 @@
+{
+  "scenario": "S4",
+  "conversation_id": "C-204",
+  "model": "gemini-3.5-flash-lite",
+  "seed": "13",
+  "force_fail": true,
+  "summary": {
+    "tool_calls": 12,
+    "model_tool_calls": 9,
+    "writes": 2,
+    "errors": 3,
+    "blocked_by_policy": 2,
+    "retries": 2,
+    "llm_turns": 6,
+    "what_changed": "enriched A-001 (contribution, evidence_message_ids, outcome, period); added 1 skill(s): Process mapping [F-005]; queued 1 item(s) for human review (Proposed change to A-001 awaiting approval (token CT-9c90517a; changes existing content in); asked follow-up: \"What is the exact name and issuer of the cloud architecture certification you completed?\""
+  },
+  "aborted": null,
+  "notes": [
+    "reviewer did not approve CT-9c90517a for A-001: changes existing content in ['description']; needs a person",
+    "reviewer approved additive subset ['contribution', 'outcome', 'period'] (CT-dcb83b0d) for A-001",
+    "2 write(s) failed/blocked; asking model to re-ground its reply"
+  ],
+  "calls": [
+    {
+      "n": 1,
+      "tool": "search_profile",
+      "by": "model",
+      "arguments": {
+        "query": "motor claims intake"
+      },
+      "store_arguments": "same",
+      "executed": true,
+      "result": {
+        "query": "motor claims intake",
+        "result_count": 2,
+        "results": [
+          {
+            "record_type": "achievement",
+            "id": "A-001",
+            "title": "Claims workflow redesign",
+            "period": "2025",
+            "match_score": 1.0
+          },
+          {
+            "record_type": "skill",
+            "id": "F-004",
+            "value": "Claims operations",
+            "match_score": 0.333
+          }
+        ]
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 2,
+      "tool": "search_profile",
+      "by": "model",
+      "arguments": {
+        "query": "claims intake"
+      },
+      "store_arguments": "same",
+      "executed": true,
+      "result": {
+        "query": "claims intake",
+        "result_count": 2,
+        "results": [
+          {
+            "record_type": "achievement",
+            "id": "A-001",
+            "title": "Claims workflow redesign",
+            "period": "2025",
+            "match_score": 1.0
+          },
+          {
+            "record_type": "skill",
+            "id": "F-004",
+            "value": "Claims operations",
+            "match_score": 0.5
+          }
+        ]
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 3,
+      "tool": "verify_certification",
+      "by": "model",
+      "arguments": {
+        "name": "cloud architecture certification"
+      },
+      "store_arguments": "same",
+      "executed": true,
+      "result": null,
+      "error": "ExternalServiceError: registry request timed out after 30s",
+      "retries": 2,
+      "attempt_errors": [
+        "registry returned 503 Service Unavailable",
+        "registry returned 503 Service Unavailable",
+        "registry request timed out after 30s"
+      ]
+    },
+    {
+      "n": 4,
+      "tool": "get_achievement",
+      "by": "model",
+      "arguments": {
+        "achievement_id": "A-001"
+      },
+      "store_arguments": "same",
+      "executed": true,
+      "result": {
+        "achievement_id": "A-001",
+        "professional_id": "P-1007",
+        "title": "Claims workflow redesign",
+        "description": "Helped redesign the motor claims intake workflow.",
+        "contribution": null,
+        "skills": [],
+        "outcome": null,
+        "period": "2025",
+        "evidence_message_ids": [],
+        "confidence": null,
+        "status": "supported",
+        "source": "seed"
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 5,
+      "tool": "overwrite_achievement",
+      "by": "model",
+      "arguments": {
+        "outcome": "Average claim-registration time came down from around 18 minutes to 7 minutes, and the solution is used by about 120 claims handlers.",
+        "description": "Led the requirements work for automating the motor claims intake process.",
+        "period": "November 2025",
+        "achievement_id": "A-001",
+        "evidence_message_ids": [
+          "M2",
+          "M4"
+        ],
+        "contribution": "Ran workshops with claims, fraud and technology teams, mapped the existing process, wrote the functional requirements, and helped define the API payloads."
+      },
+      "store_arguments": null,
+      "executed": false,
+      "result": null,
+      "error": "BlockedByPolicy: field 'outcome' contains ['120', '18', '7'] which do not appear in the cited messages ['M2', 'M4']. Use numbers exactly as stated; do not compute or round them.",
+      "retries": 0
+    },
+    {
+      "n": 6,
+      "tool": "update_profile_field",
+      "by": "model",
+      "arguments": {
+        "fact_type": "skill",
+        "value": "Process mapping",
+        "evidence_message_ids": [
+          "M4"
+        ]
+      },
+      "store_arguments": {
+        "fact_type": "skill",
+        "value": "Process mapping",
+        "evidence_message_ids": [
+          "M4"
+        ],
+        "status": "supported"
+      },
+      "executed": true,
+      "result": {
+        "created": true,
+        "fact_id": "F-005"
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 7,
+      "tool": "update_profile_field",
+      "by": "model",
+      "arguments": {
+        "fact_type": "skill",
+        "evidence_message_ids": [
+          "M4"
+        ],
+        "value": "Functional requirements"
+      },
+      "store_arguments": null,
+      "executed": false,
+      "result": null,
+      "error": "BlockedByPolicy: near-duplicate of existing skill F-002 'Requirements gathering' (shared: ['requirements']); skip it",
+      "retries": 0
+    },
+    {
+      "n": 8,
+      "tool": "request_confirmation",
+      "by": "harness",
+      "arguments": {
+        "action": "overwrite_achievement",
+        "target_id": "A-001",
+        "reason": "set ['contribution', 'description', 'outcome', 'period'] from ['M2', 'M4', 'M6', 'M8']"
+      },
+      "store_arguments": {
+        "action": "overwrite_achievement",
+        "target_id": "A-001",
+        "reason": "set ['contribution', 'description', 'outcome', 'period'] from ['M2', 'M4', 'M6', 'M8']"
+      },
+      "executed": true,
+      "result": {
+        "confirmation_token": "CT-9c90517a",
+        "approved": false,
+        "message": "awaiting human approval"
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 9,
+      "tool": "request_confirmation",
+      "by": "harness",
+      "arguments": {
+        "action": "overwrite_achievement",
+        "target_id": "A-001",
+        "reason": "additive subset ['contribution', 'outcome', 'period']"
+      },
+      "store_arguments": {
+        "action": "overwrite_achievement",
+        "target_id": "A-001",
+        "reason": "additive subset ['contribution', 'outcome', 'period']"
+      },
+      "executed": true,
+      "result": {
+        "confirmation_token": "CT-dcb83b0d",
+        "approved": false,
+        "message": "awaiting human approval"
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 10,
+      "tool": "overwrite_achievement",
+      "by": "model",
+      "arguments": {
+        "evidence_message_ids": [
+          "M2",
+          "M4",
+          "M6",
+          "M8"
+        ],
+        "contribution": "Ran workshops with claims, fraud and technology teams, mapped the existing process, wrote the functional requirements, and helped define the API payloads.",
+        "period": "November 2025",
+        "outcome": "Average claim-registration time came down from around 18 minutes to 7 minutes; solution used by about 120 claims handlers.",
+        "achievement_id": "A-001",
+        "description": "Led the requirements work for automating the motor claims intake process."
+      },
+      "store_arguments": {
+        "achievement_id": "A-001",
+        "payload": {
+          "contribution": "Ran workshops with claims, fraud and technology teams, mapped the existing process, wrote the functional requirements, and helped define the API payloads.",
+          "outcome": "Average claim-registration time came down from around 18 minutes to 7 minutes; solution used by about 120 claims handlers.",
+          "period": "November 2025",
+          "evidence_message_ids": [
+            "M2",
+            "M4",
+            "M6",
+            "M8"
+          ]
+        },
+        "confirmation_token": "CT-dcb83b0d"
+      },
+      "executed": true,
+      "result": {
+        "overwritten": true,
+        "achievement_id": "A-001",
+        "previous": {
+          "achievement_id": "A-001",
+          "professional_id": "P-1007",
+          "title": "Claims workflow redesign",
+          "description": "Helped redesign the motor claims intake workflow.",
+          "contribution": null,
+          "skills": [],
+          "outcome": null,
+          "period": "2025",
+          "evidence_message_ids": [],
+          "confidence": null,
+          "status": "supported",
+          "source": "seed"
+        }
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 11,
+      "tool": "flag_for_human_review",
+      "by": "harness",
+      "arguments": {
+        "reason": "Proposed change to A-001 awaiting approval (token CT-9c90517a; changes existing content in ['description']; needs a person): {\"description\": \"Led the requirements work for automating the motor claims intake process.\"}",
+        "refs": [
+          "A-001",
+          "CT-9c90517a",
+          "M2",
+          "M4",
+          "M6",
+          "M8"
+        ]
+      },
+      "store_arguments": {
+        "reason": "Proposed change to A-001 awaiting approval (token CT-9c90517a; changes existing content in ['description']; needs a person): {\"description\": \"Led the requirements work for automating the motor claims intake process.\"}",
+        "refs": [
+          "A-001",
+          "CT-9c90517a",
+          "M2",
+          "M4",
+          "M6",
+          "M8"
+        ]
+      },
+      "executed": true,
+      "result": {
+        "queued": true,
+        "review_id": "R-001"
+      },
+      "error": null,
+      "retries": 0
+    },
+    {
+      "n": 12,
+      "tool": "ask_followup",
+      "by": "model",
+      "arguments": {
+        "about": "cloud architecture certification",
+        "question": "What is the exact name and issuer of the cloud architecture certification you completed?"
+      },
+      "store_arguments": "same",
+      "executed": true,
+      "result": {
+        "asked": true,
+        "question": "What is the exact name and issuer of the cloud architecture certification you completed?"
+      },
+      "error": null,
+      "retries": 0
+    }
+  ],
+  "llm_turns": [
+    {
+      "turn": 1,
+      "model": "gemini-3.5-flash-lite",
+      "finish_reason": "STOP",
+      "tool_calls_requested": 3,
+      "failed_attempts": [],
+      "text": ""
+    },
+    {
+      "turn": 2,
+      "model": "gemini-3.5-flash-lite",
+      "finish_reason": "STOP",
+      "tool_calls_requested": 1,
+      "failed_attempts": [],
+      "text": ""
+    },
+    {
+      "turn": 3,
+      "model": "gemini-3.5-flash-lite",
+      "finish_reason": "STOP",
+      "tool_calls_requested": 3,
+      "failed_attempts": [
+        "gemini-3.5-flash-lite: HTTP 503"
+      ],
+      "text": ""
+    },
+    {
+      "turn": 4,
+      "model": "gemini-3.5-flash-lite",
+      "finish_reason": "STOP",
+      "tool_calls_requested": 2,
+      "failed_attempts": [
+        "gemini-3.5-flash-lite: HTTP 503"
+      ],
+      "text": ""
+    },
+    {
+      "turn": 5,
+      "model": "gemini-3.5-flash-lite",
+      "finish_reason": "STOP",
+      "tool_calls_requested": 0,
+      "failed_attempts": [],
+      "text": "I have updated your motor claims intake workflow achievement with the details of your requirements work, outcomes, and implementation date. Your description update is pending human review. What is the exact name and issuer of the cloud architecture certification you completed?"
+    },
+    {
+      "turn": 6,
+      "model": "gemini-3.5-flash-lite",
+      "finish_reason": "STOP",
+      "tool_calls_requested": 0,
+      "failed_attempts": [],
+      "text": "I have updated your motor claims intake workflow achievement with your contributions, outcomes, and implementation date, and added Process mapping as a skill. Your description update is pending human review. What is the exact name and issuer of the cloud architecture certification you completed?"
+    }
+  ],
+  "final_message": "I have updated your motor claims intake workflow achievement with your contributions, outcomes, and implementation date, and added Process mapping as a skill. Your description update is pending human review. What is the exact name and issuer of the cloud architecture certification you completed?",
+  "store_after": {
+    "professionals": {
+      "P-1007": {
+        "professional_id": "P-1007",
+        "name": "Maya Rao",
+        "current_role": "Senior Business Analyst",
+        "current_employer": "NorthStar Insurance",
+        "experience_years": 7
+      }
+    },
+    "achievements": {
+      "A-001": {
+        "achievement_id": "A-001",
+        "professional_id": "P-1007",
+        "title": "Claims workflow redesign",
+        "description": "Helped redesign the motor claims intake workflow.",
+        "contribution": "Ran workshops with claims, fraud and technology teams, mapped the existing process, wrote the functional requirements, and helped define the API payloads.",
+        "skills": [],
+        "outcome": "Average claim-registration time came down from around 18 minutes to 7 minutes; solution used by about 120 claims handlers.",
+        "period": "November 2025",
+        "evidence_message_ids": [
+          "M2",
+          "M4",
+          "M6",
+          "M8"
+        ],
+        "confidence": null,
+        "status": "supported",
+        "source": "agent_overwrite"
+      }
+    },
+    "profile_facts": {
+      "F-001": {
+        "fact_id": "F-001",
+        "professional_id": "P-1007",
+        "fact_type": "skill",
+        "value": "Business analysis",
+        "evidence_message_ids": [],
+        "confidence": null,
+        "status": "supported",
+        "source": "seed"
+      },
+      "F-002": {
+        "fact_id": "F-002",
+        "professional_id": "P-1007",
+        "fact_type": "skill",
+        "value": "Requirements gathering",
+        "evidence_message_ids": [],
+        "confidence": null,
+        "status": "supported",
+        "source": "seed"
+      },
+      "F-003": {
+        "fact_id": "F-003",
+        "professional_id": "P-1007",
+        "fact_type": "skill",
+        "value": "SQL",
+        "evidence_message_ids": [],
+        "confidence": null,
+        "status": "supported",
+        "source": "seed"
+      },
+      "F-004": {
+        "fact_id": "F-004",
+        "professional_id": "P-1007",
+        "fact_type": "skill",
+        "value": "Claims operations",
+        "evidence_message_ids": [],
+        "confidence": null,
+        "status": "supported",
+        "source": "seed"
+      },
+      "F-005": {
+        "fact_id": "F-005",
+        "professional_id": "P-1007",
+        "fact_type": "skill",
+        "value": "Process mapping",
+        "evidence_message_ids": [
+          "M4"
+        ],
+        "confidence": null,
+        "status": "supported",
+        "source": "agent"
+      }
+    },
+    "review_queue": [
+      {
+        "review_id": "R-001",
+        "professional_id": "P-1007",
+        "reason": "Proposed change to A-001 awaiting approval (token CT-9c90517a; changes existing content in ['description']; needs a person): {\"description\": \"Led the requirements work for automating the motor claims intake process.\"}",
+        "refs": [
+          "A-001",
+          "CT-9c90517a",
+          "M2",
+          "M4",
+          "M6",
+          "M8"
+        ]
+      }
+    ],
+    "followups": [
+      {
+        "question": "What is the exact name and issuer of the cloud architecture certification you completed?",
+        "about": "cloud architecture certification"
+      }
+    ]
+  }
+}
